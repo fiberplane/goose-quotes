@@ -36,8 +36,8 @@ yarn install
 4. Running migrations:
 
 ```bash
-npm run db:generate
-npm run db:migrate
+yarn run db:generate
+yarn run db:migrate
 ```
 
 5. Start the development server:
@@ -55,6 +55,7 @@ The API will be running at `http://localhost:8787` and spin up a local CloudFlar
 npx @fiberplane/studio
 ```
 
+Now inspect your routes and generate requests at `http://localhost:8788`.
 
 ## Deploy the Goose Quotes API
 
