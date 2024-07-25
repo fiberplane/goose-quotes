@@ -95,7 +95,7 @@ You will need a CloudFlare account to deploy the API. You can create one [here](
 
 Description: Home page. If the shouldHonk query parameter is present, it responds with “Honk honk!”.
 
-###GET /api/geese
+### GET /api/geese
 
 Description: Retrieves all geese. If the name query parameter is defined, it returns geese whose names match the search term.
 
