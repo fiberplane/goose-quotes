@@ -63,19 +63,57 @@ Now inspect your routes and generate requests at `http://localhost:8788`.
 yarn run deploy
 ```
 
+You will need a CloudFlare account to deploy the API. You can create one [here](https://dash.cloudflare.com/sign-up/free-trial?utm_source=honc.dev).
+
 ## Endpoints
 
-### `GET /quotes`
+### GET /
 
-Retrieve a random quote from Goose.
+Description: Home page. If the shouldHonk query parameter is present, it responds with “Honk honk!”.
 
-### `GET /quotes/random`
+###GET /api/geese
 
-Retrieve a random quote from Goose.
+Description: Retrieves all geese. If the name query parameter is defined, it returns geese whose names match the search term.
 
-### `GET /quotes/:id`
+### POST /api/geese
 
-Retrieve a specific quote by its ID.
+Description: Creates a new goose. Requires name, and optionally isFlockLeader, programmingLanguage, motivations, and location in the request body.
+
+### POST /api/geese/:id/generate
+
+Description: Generates goose quotes influenced by the specified goose.
+
+### GET /api/geese/flock-leaders
+
+Description: Retrieves all geese that are flock leaders.
+
+### GET /api/geese/:id
+
+Description: Retrieves a goose by its ID.
+
+### POST /api/geese/:id/bio
+
+Description: Generates a bio for the specified goose and updates it.
+
+### POST /api/geese/:id/honk
+
+Description: Sends a honk message to the specified goose by its ID.
+
+### PATCH /api/geese/:id
+
+Description: Updates the name of the specified goose by its ID.
+
+### GET /api/geese/language/:language
+
+Description: Retrieves geese by programming language.
+
+### PATCH /api/geese/:id/motivations
+
+Description: Updates the motivations of the specified goose by its ID.
+
+### GET /ws
+
+Description: WebSocket endpoint for handling various real-time events related to geese, such as retrieving geese and creating a new goose.
 
 ## Contributing
 
