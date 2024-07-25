@@ -1,3 +1,5 @@
+![mies__Geese_with_laptops_at_a_pond_with_a_sunset_in_the_backg_243aea88-cfab-480a-aa8b-330db45e0441_0](https://github.com/user-attachments/assets/cdffc979-3e31-4df7-9f94-1867cb0f1047)
+
 # Goose Quotes API
 
 Harnessing the power of AI to imagine the world in a goosier way.
