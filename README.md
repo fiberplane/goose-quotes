@@ -7,11 +7,15 @@ TODO: It is a basic CRUD API that is used for the [Goose Quotes](https://goose-q
 
 It is powered by the [HONC kit](https://honc.dev), consisting of [Hono](https://hono.dev/) for the API, [Neon](https://neon.tech/) for the database, and [Drizzle](https://orm.drizzle.team/) for the ORM. It runs on [CloudFlare Workers](https://developers.cloudflare.com/workers/).
 
-The repo also a good example of how to use [FPX](https://fiberplane.com/) build, test and debug an Hono API.
+The repo also a good example of how to use [FPX](https://github.com/fiberplane/fpx/) build, test and debug an Hono API.
 
 ## Requirements:
 
 Besides the requirements specified in the `package.json` you will need a Postgres database and the `DATABASE_URL` environment variable set. We recommend using [Neon](https://neon.tech/) for a Postgres database, but any other Postgres database should do the trick, as well as running one locally.
+
+For the generation of quotes and biographies for the geese, you will need an OpenAI API key. You can create one [here](https://platform.openai.com/api-keys).
+
+You can set the OpenAI API key in the `.dev.vars` file or in the `.env` file or within your `wrangler.toml` file.
 
 ## Installation
 
