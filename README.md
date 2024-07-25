@@ -55,6 +55,26 @@ The API will be running at `http://localhost:8787` and spin up a local CloudFlar
 
 ## Running FPX Studio to debug your API
 
+In order to debug your API, you can use FPX Studio and the Hono middleware.
+
+```bash
+yarn add @fiberplane/hono
+```
+
+This installs the middleware into your project. Next you must activate it in your `src/index.ts` file.
+
+```ts
+import { createHonoMiddleware } from "@fiberplane/hono"
+
+const app = new Hono()
+
+app.use(createHonoMiddleware(app))
+```
+
+See the `./src/index.ts` file for the full code.
+
+Next, you can start FPX Studio by running the following command:
+
 ```bash
 npx @fiberplane/studio
 ```
