@@ -1,4 +1,5 @@
-![mies__Geese_with_laptops_at_a_pond_with_a_sunset_in_the_backg_243aea88-cfab-480a-aa8b-330db45e0441_0](https://github.com/user-attachments/assets/cdffc979-3e31-4df7-9f94-1867cb0f1047)
+
+![HONC-Git](https://github.com/user-attachments/assets/669c0de6-d7e8-45db-a858-585f895e7d29)
 
 # Goose Quotes API
 
