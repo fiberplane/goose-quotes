@@ -304,7 +304,7 @@ app.get(
               ws.send(JSON.stringify({ type: 'GEESE', payload: geese }))
             })
             break
-          case 'CREATE_GOOSE':
+          case 'CREATE_GOOSE': {
             const { name, isFlockLeader, programmingLanguage, motivations, location } = payload
             const description = `A person named ${name} who talks like a Goose`
 
@@ -323,6 +323,7 @@ app.get(
                 ws.send(JSON.stringify({ type: 'NEW_GOOSE', payload: newGoose[0] }))
               })
             break
+          }
           // ... (handle other message types)
           default:
             break
