@@ -10,7 +10,12 @@ import { geese } from './db/schema';
 import { OpenAI } from 'openai';
 import { upgradeWebSocket } from 'hono/cloudflare-workers';
 
-const app = new Hono()
+type Bindings = {
+  DATABASE_URL: string;
+  OPENAI_API_KEY: string;
+}
+
+const app = new Hono<{ Bindings: Bindings }>()
 app.use(createHonoMiddleware(app));
 
 /**
