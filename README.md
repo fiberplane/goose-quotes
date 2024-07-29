@@ -5,8 +5,7 @@
 
 Harnessing the power of AI to imagine the world in a goosier way.
 
-This API provides a collection of inspirational quotes from the wise and charismatic Goose.
-TODO: It is a basic CRUD API that is used for the [Goose Quotes](https://goose-quotes.honc.dev/) website.
+This CRUD API provides a collection of inspirational quotes from the wise and charismatic Goose.
 
 It is powered by the [HONC kit](https://honc.dev), consisting of [Hono](https://hono.dev/) for the API, [Neon](https://neon.tech/) for the database, and [Drizzle](https://orm.drizzle.team/) for the ORM. It runs on [CloudFlare Workers](https://developers.cloudflare.com/workers/).
 
