@@ -13,7 +13,20 @@ The repo also a good example of how to use [FPX](https://github.com/fiberplane/f
 
 ## Requirements:
 
-Besides the requirements specified in the `package.json` you will need a Postgres database and the `DATABASE_URL` environment variable set. We recommend using [Neon](https://neon.tech/) for a Postgres database, but any other Postgres database should do the trick, as well as running one locally.
+Besides the requirements specified in the `package.json` you will need a Postgres database. 
+
+### Database Setup
+
+#### 1. Initializing the Database tables:
+The `DATABASE_URL` must be set as an environment variable to run the `db:migration` script, which migrates the generated tables to the database.
+#### 2. Ensuring Cloudflare Worker Access:
+Later, the Cloudflare worker will also need access to this variable. Therefore, it should be set in one of the following locations:
+- `.dev.vars` file
+- `wrangler.toml` file
+
+We recommend using [Neon](https://neon.tech/) for a Postgres database, but any other Postgres database should do the trick, as well as running one locally.
+
+### OpenAi API Setup
 
 For the generation of quotes and biographies for the geese, you will need an OpenAI API key. You can create one [here](https://platform.openai.com/api-keys).
 
