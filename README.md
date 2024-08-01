@@ -16,13 +16,7 @@ The repo also a good example of how to use [FPX](https://github.com/fiberplane/f
 Besides the requirements specified in the `package.json` you will need a Postgres database. 
 
 ### Database Setup
-
-#### 1. Initializing the Database tables:
-The `DATABASE_URL` must be set as an environment variable to run the `db:migration` script, which migrates the generated tables to the database.
-#### 2. Ensuring Cloudflare Worker Access:
-Later, the Cloudflare worker will also need access to this variable. Therefore, it should be set in one of the following locations:
-- `.dev.vars` file
-- `wrangler.toml` file
+The `DATABASE_URL` must be specified in a `.dev.vars` file located at the root of the project. The migrate.ts script will use this URL to create the tables. Additionally, the Cloudflare Worker operates within the context of the `.dev.vars` file, allowing it to access the `DATABASE_URL` for retrieving, adding, and updating Geeses
 
 We recommend using [Neon](https://neon.tech/) for a Postgres database, but any other Postgres database should do the trick, as well as running one locally.
 
