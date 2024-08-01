@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir":"dist",
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -14,4 +15,6 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   },
+
+
 }
