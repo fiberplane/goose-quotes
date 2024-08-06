@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 
-import { createHonoMiddleware } from '@fiberplane/hono';
+import { instrument } from '@fiberplane/hono-otel';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { asc, eq, ilike } from 'drizzle-orm';
@@ -16,7 +16,6 @@ type Bindings = {
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
-app.use(createHonoMiddleware(app));
 
 /**
  * Home page
@@ -341,7 +340,8 @@ app.get(
   })
 )
 
-export default app
+// @ts-expect-error - We need types to play more nicely with Hono
+export default instrument(app)
 
 function trimPrompt(prompt: string) {
   return prompt
