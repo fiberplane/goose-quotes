@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 
+import { instrument } from '@fiberplane/hono-otel';
 import { neon } from '@neondatabase/serverless';
 import { asc, eq, ilike } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-http';
@@ -8,8 +9,6 @@ import { geese } from './db/schema';
 
 import { upgradeWebSocket } from 'hono/cloudflare-workers';
 import { OpenAI } from 'openai';
-
-import { instrument } from '@fiberplane/hono-otel';
 
 type Bindings = {
   DATABASE_URL: string;
