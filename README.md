@@ -15,22 +15,20 @@ The repo also a good example of how to use [FPX](https://github.com/fiberplane/f
 
 Besides the requirements specified in the `package.json` you will need a Postgres database. 
 
-### Database Setup
+### Setup
+To run this project you need to provide a `DATABASE_URL` and an `OPENAI_API_KEY`. The easiest way is to provide both in a `dev.vars` file at the root of the project. A `dev.vars.example` file is included in the project to serve as a template 
 
-#### 1. Initializing the Database tables:
-The `DATABASE_URL` must be set as an environment variable to run the `db:migration` script, which migrates the generated tables to the database.
-#### 2. Ensuring Cloudflare Worker Access:
-Later, the Cloudflare worker will also need access to this variable. Therefore, it should be set in one of the following locations:
-- `.dev.vars` file
-- `wrangler.toml` file
+#### 1. Database
+Set the `DATABASE_URL` in the `dev.vars`. The `drizzle.config.ts` file will use this URL to migrate the tables to your database. The Cloudflare worker will also need access to this variable to interact with the database.
 
 We recommend using [Neon](https://neon.tech/) for a Postgres database, but any other Postgres database should do the trick, as well as running one locally.
 
-### OpenAi API Setup
+### 2. OpenAi API
 
 For the generation of quotes and biographies for the geese, you will need an OpenAI API key. You can create one [here](https://platform.openai.com/api-keys).
 
 You can set the OpenAI API key in the `.dev.vars` file or in the `.env` file or within your `wrangler.toml` file.
+
 
 ## Installation
 

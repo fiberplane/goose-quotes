@@ -11,6 +11,7 @@
     "@neondatabase/serverless": "^0.9.4",
     "drizzle-orm": "^0.32.0",
     "hono": "^4.5.1",
+    "dotenv": "^16.4.5",
     "openai": "^4.53.0"
   },
   "devDependencies": {
