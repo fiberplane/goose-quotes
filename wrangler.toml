@@ -9,9 +9,9 @@ compatibility_flags = [ "nodejs_compat" ]
 # binding = "MY_KV_NAMESPACE"
 # id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-# [[r2_buckets]]
-# binding = "MY_BUCKET"
-# bucket_name = "my-bucket"
+[[r2_buckets]]
+binding = "GOOSE_AVATARS"
+bucket_name = "goose-avatars"
 
 # [[d1_databases]]
 # binding = "DB"

@@ -13,6 +13,7 @@ import { OpenAI } from 'openai';
 type Bindings = {
   DATABASE_URL: string;
   OPENAI_API_KEY: string;
+  GOOSE_AVATARS: R2Bucket
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -290,6 +291,37 @@ app.patch('/api/geese/:id/motivations', async (c) => {
   }
 
   return c.json(updatedGoose);
+});
+
+/**
+ * Update a Goose's avatar by id
+ */
+app.post('/api/geese/:id/avatar', async (c) => {
+  const sql = neon(c.env.DATABASE_URL)
+  const db = drizzle(sql);
+
+  const id = c.req.param('id');
+  const { avatar } = await c.req.parseBody();
+
+  // Validate the avatar is a file
+  if (!(avatar instanceof File)) {
+    return c.json({ message: 'Avatar must be a file' }, 422);
+  }
+
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  if (!allowedTypes.includes(avatar.type)) {
+    return c.json({ message: 'Avatar must be a JPEG, PNG, or GIF image' }, 422);
+  }
+  const bucketKey = `goose-${id}-avatar-${Date.now()}.png`;
+
+
+  // const goose = (await db.update(geese).set({ name }).where(eq(geese.id, +id)).returning())?.[0];
+
+  // if (!goose) {
+  //   return c.json({ message: 'Goose not found' }, 404);
+  // }
+
+  return c.json(goose);
 });
 
 

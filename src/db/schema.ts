@@ -9,6 +9,7 @@ export const geese = pgTable('geese', {
   motivations: jsonb('motivations'),
   location: text('location'),
   bio: text('bio'),
+  avatar: text('avatar'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
