@@ -205,8 +205,6 @@ app.post('/api/geese/:id/bio', async c => {
     max_tokens: 2048,
   });
 
-
-
   const bio = response.choices[0].message.content;
 
   // Update the goose with the generated bio
@@ -293,6 +291,29 @@ app.patch('/api/geese/:id/motivations', async (c) => {
   return c.json(updatedGoose);
 });
 
+app.post('/api/geese/:id/change-name-url-form', async (c) => {
+  const sql = neon(c.env.DATABASE_URL)
+  const db = drizzle(sql);
+
+  const id = c.req.param('id');
+  const [goose] = (await db.select().from(geese).where(eq(geese.id, +id)));
+
+  if (!goose) {
+    return c.json({ message: 'Goose not found' }, 404);
+  }
+
+  const form = await c.req.formData();
+  const name = form.get('name');
+
+  if (!name) {
+    return c.json({ message: 'Name is required' }, 400);
+  }
+
+  const [updatedGoose] = await db.update(geese).set({ name }).where(eq(geese.id, +id)).returning();
+
+  return c.json(updatedGoose, 200);
+});
+
 /**
  * Update a Goose's avatar by id
  */
@@ -301,8 +322,15 @@ app.post('/api/geese/:id/avatar', async (c) => {
   const db = drizzle(sql);
 
   const id = c.req.param('id');
-  const { avatar } = await c.req.parseBody();
 
+  const [goose] = (await db.select().from(geese).where(eq(geese.id, +id)));
+
+  if (!goose) {
+    return c.json({ message: 'Goose not found' }, 404);
+  }
+
+  const { avatar, avatarName } = await c.req.parseBody();
+  console.log({ avatarName }, "is the avatar name")
   // Validate the avatar is a file
   if (!(avatar instanceof File)) {
     return c.json({ message: 'Avatar must be a file' }, 422);
