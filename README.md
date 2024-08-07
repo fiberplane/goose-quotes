@@ -9,7 +9,7 @@ This CRUD API provides a collection of inspirational quotes from the wise and ch
 
 It is powered by the [HONC stack](https://honc.dev), consisting of [Hono](https://hono.dev/) for the API, [Neon](https://neon.tech/) for the database, and [Drizzle](https://orm.drizzle.team/) for the ORM. It runs on [CloudFlare Workers](https://developers.cloudflare.com/workers/).
 
-The repo also a good example of how to use [FPX](https://github.com/fiberplane/fpx/) to build, test and debug a Hono API.
+The repo is also a good example of how to use [FPX](https://github.com/fiberplane/fpx/) to build, test and debug a Hono API.
 
 ## Requirements:
 
