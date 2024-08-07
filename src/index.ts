@@ -209,13 +209,13 @@ app.post('/api/geese/:id/bio', async c => {
 
   const bio = response.choices[0].message.content;
 
-   // Update the goose with the generated bio
-   const updatedGoose = await db.update(geese)
-   .set({ bio })
-   .where(eq(geese.id, +id))
-   .returning();
+  // Update the goose with the generated bio
+  const updatedGoose = await db.update(geese)
+    .set({ bio })
+    .where(eq(geese.id, +id))
+    .returning();
 
- return c.json(updatedGoose[0]);
+  return c.json(updatedGoose[0]);
 
 })
 
@@ -308,20 +308,22 @@ app.post('/api/geese/:id/avatar', async (c) => {
     return c.json({ message: 'Avatar must be a file' }, 422);
   }
 
+  // Validate the avatar is a JPEG, PNG, or GIF
   const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
   if (!allowedTypes.includes(avatar.type)) {
     return c.json({ message: 'Avatar must be a JPEG, PNG, or GIF image' }, 422);
   }
-  const bucketKey = `goose-${id}-avatar-${Date.now()}.png`;
 
+  // Get the file extension from the avatar's type
+  const fileExtension = avatar.type.split('/')[1];
 
-  // const goose = (await db.update(geese).set({ name }).where(eq(geese.id, +id)).returning())?.[0];
+  // Save the avatar to the bucket
+  const bucketKey = `goose-${id}-avatar-${Date.now()}.${fileExtension}`;
+  await c.env.GOOSE_AVATARS.put(bucketKey, avatar.stream(), { httpMetadata: { contentType: avatar.type } })
 
-  // if (!goose) {
-  //   return c.json({ message: 'Goose not found' }, 404);
-  // }
+  const [updatedGoose] = await db.update(geese).set({ avatar: bucketKey }).where(eq(geese.id, +id)).returning();
 
-  return c.json(goose);
+  return c.json(updatedGoose);
 });
 
 
