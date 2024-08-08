@@ -1,22 +1,19 @@
 import { Hono } from 'hono'
-
-import { createHonoMiddleware } from '@fiberplane/hono';
+import { upgradeWebSocket } from 'hono/cloudflare-workers';
+import { instrument } from '@fiberplane/hono-otel';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { asc, eq, ilike } from 'drizzle-orm';
-
-import { geese } from './db/schema';
-
 import { OpenAI } from 'openai';
-import { upgradeWebSocket } from 'hono/cloudflare-workers';
+import { geese } from './db/schema';
 
 type Bindings = {
   DATABASE_URL: string;
   OPENAI_API_KEY: string;
+  GOOSE_AVATARS: R2Bucket
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
-app.use(createHonoMiddleware(app));
 
 /**
  * Home page
@@ -205,17 +202,15 @@ app.post('/api/geese/:id/bio', async c => {
     max_tokens: 2048,
   });
 
-  
-
   const bio = response.choices[0].message.content;
 
-   // Update the goose with the generated bio
-   const updatedGoose = await db.update(geese)
-   .set({ bio })
-   .where(eq(geese.id, +id))
-   .returning();
+  // Update the goose with the generated bio
+  const updatedGoose = await db.update(geese)
+    .set({ bio })
+    .where(eq(geese.id, +id))
+    .returning();
 
- return c.json(updatedGoose[0]);
+  return c.json(updatedGoose[0]);
 
 })
 
@@ -293,6 +288,69 @@ app.patch('/api/geese/:id/motivations', async (c) => {
   return c.json(updatedGoose);
 });
 
+app.post('/api/geese/:id/change-name-url-form', async (c) => {
+  const sql = neon(c.env.DATABASE_URL)
+  const db = drizzle(sql);
+
+  const id = c.req.param('id');
+  const [goose] = (await db.select().from(geese).where(eq(geese.id, +id)));
+
+  if (!goose) {
+    return c.json({ message: 'Goose not found' }, 404);
+  }
+
+  const form = await c.req.formData();
+  const name = form.get('name');
+
+  if (!name) {
+    return c.json({ message: 'Name is required' }, 400);
+  }
+
+  const [updatedGoose] = await db.update(geese).set({ name }).where(eq(geese.id, +id)).returning();
+
+  return c.json(updatedGoose, 200);
+});
+
+/**
+ * Update a Goose's avatar by id
+ */
+app.post('/api/geese/:id/avatar', async (c) => {
+  const sql = neon(c.env.DATABASE_URL)
+  const db = drizzle(sql);
+
+  const id = c.req.param('id');
+
+  const [goose] = (await db.select().from(geese).where(eq(geese.id, +id)));
+
+  if (!goose) {
+    return c.json({ message: 'Goose not found' }, 404);
+  }
+
+  const { avatar, avatarName } = await c.req.parseBody();
+  console.log({ avatarName }, "is the avatar name")
+  // Validate the avatar is a file
+  if (!(avatar instanceof File)) {
+    return c.json({ message: 'Avatar must be a file' }, 422);
+  }
+
+  // Validate the avatar is a JPEG, PNG, or GIF
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  if (!allowedTypes.includes(avatar.type)) {
+    return c.json({ message: 'Avatar must be a JPEG, PNG, or GIF image' }, 422);
+  }
+
+  // Get the file extension from the avatar's type
+  const fileExtension = avatar.type.split('/')[1];
+
+  // Save the avatar to the bucket
+  const bucketKey = `goose-${id}-avatar-${Date.now()}.${fileExtension}`;
+  await c.env.GOOSE_AVATARS.put(bucketKey, avatar.stream(), { httpMetadata: { contentType: avatar.type } })
+
+  const [updatedGoose] = await db.update(geese).set({ avatar: bucketKey }).where(eq(geese.id, +id)).returning();
+
+  return c.json(updatedGoose);
+});
+
 
 app.get(
   '/ws',
@@ -341,7 +399,7 @@ app.get(
   })
 )
 
-export default app
+export default instrument(app)
 
 function trimPrompt(prompt: string) {
   return prompt
