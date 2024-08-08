@@ -402,7 +402,6 @@ app.get(
   })
 )
 
-// @ts-expect-error - We need types to play more nicely with Hono
 export default instrument(app)
 
 function trimPrompt(prompt: string) {
