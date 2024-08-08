@@ -1,14 +1,11 @@
 import { Hono } from 'hono'
-
+import { upgradeWebSocket } from 'hono/cloudflare-workers';
 import { instrument } from '@fiberplane/hono-otel';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { asc, eq, ilike } from 'drizzle-orm';
-
-import { geese } from './db/schema';
-
 import { OpenAI } from 'openai';
-import { upgradeWebSocket } from 'hono/cloudflare-workers';
+import { geese } from './db/schema';
 
 type Bindings = {
   DATABASE_URL: string;
