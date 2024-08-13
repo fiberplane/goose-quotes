@@ -1,14 +1,15 @@
-import { Hono } from 'hono'
+import { Hono } from 'hono';
 
-import { createHonoMiddleware } from '@fiberplane/hono';
 import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
 import { asc, eq, ilike } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/neon-http';
 
 import { geese } from './db/schema';
 
-import { OpenAI } from 'openai';
 import { upgradeWebSocket } from 'hono/cloudflare-workers';
+import { OpenAI } from 'openai';
+
+import { instrument } from '@fiberplane/hono-otel';
 
 type Bindings = {
   DATABASE_URL: string;
@@ -16,11 +17,10 @@ type Bindings = {
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
-app.use(createHonoMiddleware(app));
 
 /**
  * Home page
- * 
+ *
  * If `shouldHonk` query parameter is present, then print "Honk honk!"
  */
 app.get('/', (c) => {
@@ -31,7 +31,7 @@ app.get('/', (c) => {
 
 /**
  * Search Geese by name
- * 
+ *
  * If `name` query parameter is not defined, then return all geese
  */
 app.get('/api/geese', async (c) => {
@@ -53,7 +53,7 @@ app.get('/api/geese', async (c) => {
 
 /**
  * Create a Goose and return the Goose
- * 
+ *
  * Only requires a `name` parameter in the request body
  */
 app.post('/api/geese', async (c) => {
@@ -107,7 +107,7 @@ app.post('/api/geese/:id/generate', async c => {
             You are a goose. You are a very smart goose. You are part goose, part AI. You are a GooseAI.
             You are also influenced heavily by the work of ${gooseName}.
 
-            Always respond without preamble. If I ask for a list, give me a newline-separated list. That's it. 
+            Always respond without preamble. If I ask for a list, give me a newline-separated list. That's it.
             Don't number it. Don't bullet it. Just newline it.
 
             Never forget to Honk. A lot.
@@ -205,7 +205,7 @@ app.post('/api/geese/:id/bio', async c => {
     max_tokens: 2048,
   });
 
-  
+
 
   const bio = response.choices[0].message.content;
 
@@ -341,7 +341,7 @@ app.get(
   })
 )
 
-export default app
+export default instrument(app)
 
 function trimPrompt(prompt: string) {
   return prompt
