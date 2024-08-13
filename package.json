@@ -7,7 +7,6 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@fiberplane/hono": "^0.2.0",
     "@fiberplane/hono-otel": "^0.1.0-beta.1",
     "@neondatabase/serverless": "^0.9.4",
     "dotenv": "^16.4.5",
