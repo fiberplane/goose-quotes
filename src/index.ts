@@ -333,7 +333,7 @@ app.post('/api/geese/:id/avatar', async (c) => {
   console.log({ avatarName }, "is the avatar name")
   // Validate the avatar is a file
   if (!(avatar instanceof File)) {
-    return c.json({ message: 'Avatar must be a file' }, 422);
+    return c.json({ message: 'Avatar must be a file', actualType: typeof avatar }, 422);
   }
 
   // Validate the avatar is a JPEG, PNG, or GIF
