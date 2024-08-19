@@ -1,5 +1,6 @@
 name = "goose-quotes"
 compatibility_date = "2024-07-23"
+compatibility_flags = ["nodejs_compat"]
 
 # [vars]
 # MY_VAR = "my-variable"
