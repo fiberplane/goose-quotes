@@ -1,7 +1,6 @@
 name = "goose-quotes"
 compatibility_date = "2024-07-23"
 compatibility_flags = [ "nodejs_compat" ]
-# compatibility_flags = [ "stuff", "nodejs_compat" ]
 
 # [dev]
 # port = 3001

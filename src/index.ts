@@ -24,9 +24,18 @@ const app = new Hono<{ Bindings: Bindings }>()
  * If `shouldHonk` query parameter is present, then print "Honk honk!"
  */
 app.get('/', (c) => {
+  const h = c.req.raw.headers
+  console.log(h)
+  let response = ""
+  for (let i = 0; i < 50; i++) {
+    const gibberish = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const message = `Gibberish ${i + 1}: ${gibberish}`
+    console.log(message);
+    response += `${message}\n`;
+  }
   const { shouldHonk } = c.req.query();
   const honk = typeof shouldHonk !== "undefined" ? 'Honk honk!' : '';
-  return c.text(`Hello Goose Quotes! ${honk}`.trim())
+  return c.text(`Hello Goose Quotes! ${honk} ${response}`.trim())
 })
 
 /**
@@ -355,6 +364,40 @@ app.post('/api/geese/:id/avatar', async (c) => {
 });
 
 
+/**
+ * Get a Goose's avatar by id
+ */
+app.get('/api/geese/:id/avatar', async (c) => {
+  const sql = neon(c.env.DATABASE_URL)
+  const db = drizzle(sql);
+
+  const id = c.req.param('id');
+
+  const [goose] = (await db.select().from(geese).where(eq(geese.id, +id)));
+
+  if (!goose) {
+    return c.json({ message: 'Goose not found' }, 404);
+  }
+
+  const avatarKey = goose.avatar;
+
+  if (!avatarKey) {
+    return c.json({ message: 'Goose has no avatar' }, 404);
+  }
+
+  const avatar = await c.env.GOOSE_AVATARS.get(avatarKey);
+
+  if (!avatar) {
+    return c.json({ message: 'Goose avatar not found' }, 404);
+  }
+
+  const responseHeaders = mapR2HttpMetadataToHeaders(avatar.httpMetadata);
+  return new Response(avatar.body, {
+    headers: responseHeaders,
+  });
+});
+
+
 app.get(
   '/ws',
   upgradeWebSocket((c) => {
@@ -410,4 +453,33 @@ function trimPrompt(prompt: string) {
     .split("\n")
     .map((l) => l.trim())
     .join("\n");
+}
+
+function mapR2HttpMetadataToHeaders(metadata?: R2HTTPMetadata): Headers {
+  const headers = new Headers();
+
+  if (!metadata) {
+    return headers;
+  }
+
+  if (metadata.contentType) {
+    headers.set('Content-Type', metadata.contentType);
+  }
+  if (metadata.contentLanguage) {
+    headers.set('Content-Language', metadata.contentLanguage);
+  }
+  if (metadata.contentDisposition) {
+    headers.set('Content-Disposition', metadata.contentDisposition);
+  }
+  if (metadata.contentEncoding) {
+    headers.set('Content-Encoding', metadata.contentEncoding);
+  }
+  if (metadata.cacheControl) {
+    headers.set('Cache-Control', metadata.cacheControl);
+  }
+  if (metadata.cacheExpiry) {
+    headers.set('Cache-Expiry', metadata.cacheExpiry.toUTCString());
+  }
+
+  return headers;
 }

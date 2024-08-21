@@ -415,10 +415,9 @@
   resolved "https://registry.npmjs.org/@fastify/busboy/-/busboy-2.1.1.tgz"
   integrity sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==
 
-"@fiberplane/hono-otel@^0.1.0-beta.1":
-  version "0.1.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@fiberplane/hono-otel/-/hono-otel-0.1.0-beta.1.tgz#59e4cfa8901a53a32426ecdb99f0b50781315999"
-  integrity sha512-PNQFmXuJclIJUF8iiOk2JtmMoZWAl7QV1TZcLAM4T/ta/BproI9lCd00gmq9MCoIfzD37e2a3sT5mJkh614heA==
+"@fiberplane/hono-otel@https://pkg.pr.new/fiberplane/fpx/@fiberplane/hono-otel@150":
+  version "0.1.0-beta.3"
+  resolved "https://pkg.pr.new/fiberplane/fpx/@fiberplane/hono-otel@150#e7203d9a54f01748c18615b109898da957a44ed9"
   dependencies:
     "@opentelemetry/api" "~1.9.0"
     "@opentelemetry/exporter-trace-otlp-http" "^0.52.1"

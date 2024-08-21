@@ -7,7 +7,7 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@fiberplane/hono-otel": "^0.1.0-beta.1",
+    "@fiberplane/hono-otel": "https://pkg.pr.new/fiberplane/fpx/@fiberplane/hono-otel@150",
     "@neondatabase/serverless": "^0.9.4",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.32.0",
