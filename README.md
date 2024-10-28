@@ -50,11 +50,18 @@ cd goose-quotes-api
 yarn install
 ```
 
-4. Running migrations:
+4. Setting up the database:
+
+```bash
+yarn run db:setup
+```
+
+which is the same as running:
 
 ```bash
 yarn run db:generate
 yarn run db:migrate
+yarn run db:seed
 ```
 
 5. Start the development server:
@@ -68,31 +75,15 @@ The API will be running at `http://localhost:8787` and spin up a local CloudFlar
 
 ## Running FPX Studio to debug your API
 
-In order to debug your API, you can use FPX Studio and the Hono middleware.
+In order to debug your API, you can use FPX Studio and the Hono Otel Client Library.
+
+The client library is already installed and configured in the project. All you need to do is run the following command to start FPX Studio:
 
 ```bash
-yarn add @fiberplane/hono
+yarn run fiberplane
 ```
 
-This installs the middleware into your project. Next you must activate it in your `src/index.ts` file.
-
-```ts
-import { createHonoMiddleware } from "@fiberplane/hono"
-
-const app = new Hono()
-
-app.use(createHonoMiddleware(app))
-```
-
-See the `./src/index.ts` file for the full code.
-
-Next, you can start FPX Studio by running the following command:
-
-```bash
-npx @fiberplane/studio
-```
-
-Now inspect your routes and generate requests at `http://localhost:8788`.
+Then restart your API, and inspect your routes and generate requests at `http://localhost:8788`.
 
 ## Deploy the Goose Quotes API
 
