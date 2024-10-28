@@ -7,16 +7,16 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@fiberplane/hono-otel": "0.1.0-alpha.8",
-    "@neondatabase/serverless": "^0.9.4",
+    "@fiberplane/hono-otel": "^0.3.1",
+    "@neondatabase/serverless": "^0.10.1",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.32.0",
-    "hono": "^4.5.1",
+    "drizzle-orm": "^0.35.3",
+    "hono": "^4.6.7",
     "openai": "^4.53.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240529.0",
-    "drizzle-kit": "^0.23.0",
-    "wrangler": "^3.67.1"
+    "@cloudflare/workers-types": "^4.20241022.0",
+    "drizzle-kit": "^0.26.2",
+    "wrangler": "^3.83.0"
   }
 }
