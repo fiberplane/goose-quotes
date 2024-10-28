@@ -4,7 +4,10 @@
     "dev": "wrangler dev src/index.ts",
     "deploy": "wrangler deploy --minify src/index.ts",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "db:seed": "tsx seed.ts",
+    "db:setup": "npm run db:generate && npm run db:migrate && npm run db:seed",
+    "fiberplane": "npx @fiberplane/studio@latest"
   },
   "dependencies": {
     "@fiberplane/hono-otel": "^0.3.1",
@@ -17,6 +20,9 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241022.0",
     "drizzle-kit": "^0.26.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4",
+    "typescript-language-server": "^4.3.3",
     "wrangler": "^3.83.0"
   }
 }

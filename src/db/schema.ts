@@ -12,3 +12,5 @@ export const geese = pgTable('geese', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export type NewGoose = typeof geese.$inferInsert;
