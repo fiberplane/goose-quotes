@@ -13,10 +13,47 @@ import { OpenAI } from 'openai';
 type Bindings = {
   DATABASE_URL: string;
   OPENAI_API_KEY: string;
-  GOOSE_AVATARS: R2Bucket
+  GOOSE_AVATARS: R2Bucket;
+  AI: Ai;
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
+
+// https://developers.cloudflare.com/workers-ai/models/dreamshaper-8-lcm
+app.post("/heyy-thereee", async (c) => {
+  // const inputs = {
+  //   prompt: "cyberpunk cat",
+  // };
+  // const result = await c.env.AI.run(
+  //   "@cf/lykon/dreamshaper-8-lcm",
+  //   inputs
+  // );
+
+  let message = null;
+  try {
+    const body = await c.req.json();
+    message = body?.message || "What is the origin of the phrase Hello, World";
+  } catch (e) {
+    console.error("Error parsing request body", e)
+    message = "What is the origin of the phrase Hello, World";
+  }
+
+  const messages = [
+    { role: "system", content: "You are a friendly assistant" },
+    {
+      role: "user",
+      content: message,
+    },
+  ];
+
+  console.log(messages)
+  // @ts-expect-error - AI is not typed properly
+  const response = await c.env.AI.run("@cf/meta/llama-3.1-8b-instruct-awq", { messages });
+
+  console.log(response)
+
+  return c.text(response.response)
+})
 
 /**
  * Home page
@@ -24,15 +61,16 @@ const app = new Hono<{ Bindings: Bindings }>()
  * If `shouldHonk` query parameter is present, then print "Honk honk!"
  */
 app.get('/', (c) => {
-  const h = c.req.raw.headers
-  console.log(h)
+  console.log(c.req.header("x-sup-dude"))
+
+  // console.error("something went wrong")
   let response = ""
-  for (let i = 0; i < 50; i++) {
-    const gibberish = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    const message = `Gibberish ${i + 1}: ${gibberish}`
-    console.log(message);
-    response += `${message}\n`;
-  }
+  // for (let i = 0; i < 50; i++) {
+  //   const gibberish = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  //   const message = `Gibberish ${i + 1}: ${gibberish}`
+  //   console.log(message);
+  //   response += `${message}\n`;
+  // }
   const { shouldHonk } = c.req.query();
   const honk = typeof shouldHonk !== "undefined" ? 'Honk honk!' : '';
   return c.text(`Hello Goose Quotes! ${honk} ${response}`.trim())
@@ -445,7 +483,7 @@ app.get(
   })
 )
 
-export default instrument(app)
+export default instrument(app, { monitor: { cfBindings: true } })
 
 function trimPrompt(prompt: string) {
   return prompt
